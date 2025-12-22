@@ -134,4 +134,15 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-//  
+//  get my total orders count 
+export const getMyOrdersCount = async (req, res) => {
+  try {
+    const totalOrders = await Order.countDocuments({ user: req.user._id });
+
+    res.status(200).json({
+      totalOrders
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

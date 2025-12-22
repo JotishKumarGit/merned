@@ -8,7 +8,7 @@ const makeAbsoluteImageUrl = (req, imagePath) => {
   const host = `${req.protocol}://${req.get("host")}`; // e.g. http://localhost:5000
   return imagePath.startsWith("/") ? `${host}${imagePath}` : `${host}/${imagePath}`;
 };
-
+  
 // Add to Cart
 export const addToCart = async (req, res) => {
   try {

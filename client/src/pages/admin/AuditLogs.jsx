@@ -26,13 +26,13 @@ export default function AuditLogs() {
                 </thead>
                 <tbody>
                     {/* {logs.map(log => (
-            <tr key={log._id}>
-              <td>{log.action}</td>
-              <td>{log.message}</td>
-              <td>{log.adminId?.name || "Unknown"}</td>
-              <td>{new Date(log.timestamp).toLocaleString()}</td>
-            </tr>
-          ))} */}
+                        <tr key={log._id}>
+                            <td>{log.action}</td>
+                            <td>{log.message}</td>
+                            <td>{log.adminId?.name || "Unknown"}</td>
+                            <td>{new Date(log.timestamp).toLocaleString()}</td>
+                        </tr>
+                    ))} */}
                     <td>Delete</td>
                     <td>User account deleted</td>
                     <td>Admin User</td>

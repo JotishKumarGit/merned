@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { placeOrder, cancelOrder, markOrderAsPaid, getMyOrders, getAllOrders, updateOrderStatus } from '../controllers/orderController.js';
+import { placeOrder, cancelOrder, markOrderAsPaid, getMyOrders, getAllOrders, updateOrderStatus,getMyOrdersCount } from '../controllers/orderController.js';
 import { adminOnly, protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -13,6 +13,7 @@ router.get('/my-orders', protect, getMyOrders); // View own orders
 // ADMIN ROUTES
 router.get('/', protect, adminOnly, getAllOrders); // View all orders
 router.put('/:id/status', protect, adminOnly, updateOrderStatus); // Update status
+router.get('/get-my-orders' , protect, getMyOrdersCount); // Get count of user's orders
 
 export default router;
 

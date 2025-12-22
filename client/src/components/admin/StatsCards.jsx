@@ -1,9 +1,37 @@
-// src/components/admin/StatsCards.jsx
+import { useEffect, useState } from "react";
+import api from "../../api/apiClient";
+
 export default function StatsCards() {
+  const [users, setUsers] = useState([]);
+  const [ordersCount, setOrdersCount] = useState(0);
+
+  const fetchUsers = async () => {
+    try {
+      const { data } = await api.get("/admin/users");
+      setUsers(data || []);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
+
+  const fetchOrdersCount = async () => {
+    try {
+      const { data } = await api.get("/admin/total-orders");
+      setOrdersCount(data.totalOrders);
+    } catch (err) {
+      console.error("Error fetching total orders:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+    fetchOrdersCount();
+  }, []);
+
   const stats = [
     { title: "Revenue", value: "$45,000", color: "bg-success" },
-    { title: "Orders", value: "320", color: "bg-primary" },
-    { title: "Users", value: "1,200", color: "bg-info" },
+    { title: "Orders", value: ordersCount, color: "bg-primary" },
+    { title: "Users", value: users.length, color: "bg-info" },
   ];
 
   return (

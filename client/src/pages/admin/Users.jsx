@@ -8,7 +8,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await api.get("/admin/users"); // secure route
+      const { data } = await api.get("/admin/users");
       setUsers(data || []);
     } catch (err) {
       console.error("Error fetching users:", err);

@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Button,
-  Table,
-  Form,
-  Card,
-  Row,
-  Col,
-  Spinner,
-} from "react-bootstrap";
+import { Modal,Button,Table,Form,Card,Row,Col,Spinner} from "react-bootstrap";
 import api from "../../api/apiClient";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -157,7 +148,9 @@ const Products = () => {
         <Card.Body>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h4 className="mb-0">Manage Products</h4>
-            <div className="p-2 bg-light border rounded text-center shadow-sm">
+            <div className="d-flex align-items-center gap-3 ">
+
+            <div className="p-2 bg-light border rounded text-center shadow-sm d-none d-md-block" >
               <h5>
                 Total Products:{" "}
                 <span className="text-primary">{products.length}</span>
@@ -166,6 +159,7 @@ const Products = () => {
             <Button variant="primary" onClick={() => handleShow()}>
               + Add Product
             </Button>
+          </div>  
           </div>
 
           {loading ? (
@@ -193,13 +187,7 @@ const Products = () => {
                     <tr key={prod._id} data-aos="fade-up">
                       <td>{index + 1}</td>
                       <td>
-                        <img
-                          src={`${import.meta.env.VITE_API_URL}${prod.image}`}
-                          alt={prod.name}
-                          width="50"
-                          height="50"
-                          style={{ borderRadius: "8px", objectFit: "cover" }}
-                        />
+                        <img src={`${import.meta.env.VITE_API_URL}${prod.image}`} alt={prod.name} width="50" height="50" style={{ borderRadius: "8px", objectFit: "cover" }} />
                       </td>
                       <td>{prod.name}</td>
                       <td>{prod.category?.name}</td>
@@ -207,22 +195,8 @@ const Products = () => {
                       <td>{prod.stock}</td>
                       <td>{prod.averageRating?.toFixed(1) || 0}</td>
                       <td>
-                        <Button
-                          variant="warning"
-                          size="sm"
-                          className="me-2 mb-2"
-                          onClick={() => handleShow(prod)}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          className="me-2 mb-2"
-                          onClick={() => handleDelete(prod._id)}
-                        >
-                          Delete
-                        </Button>
+                        <Button variant="warning" size="sm" className="me-2 mb-2" onClick={() => handleShow(prod)}>Edit</Button>
+                        <Button variant="danger" size="sm" className="me-2 mb-2" onClick={() => handleDelete(prod._id)}>Delete</Button>
                       </td>
                     </tr>
                   ))
@@ -361,6 +335,7 @@ const Products = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
     </div>
   );
 };

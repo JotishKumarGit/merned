@@ -267,3 +267,17 @@ export const getAllUsers = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch users" });
   }
 };
+
+
+// Get Total Orders Count (Admin)
+export const getTotalOrdersCount = async (req, res) => {
+  try {
+    const totalOrders = await Order.countDocuments();
+
+    res.status(200).json({
+      totalOrders
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

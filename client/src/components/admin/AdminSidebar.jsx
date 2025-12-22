@@ -18,8 +18,6 @@ export default function AdminSidebar({ isOpen, setIsOpen }) {
     { to: "/admin/settings", label: "Settings", icon: <Settings size={18} /> },
     { to: "/admin/analytics", label: "Analytics", icon: <BarChart size={18} /> },
     { to: "/admin/audit-logs", label: "Audit Logs", icon: <ClipboardList size={18} /> }
-
-
   ];
 
   return (

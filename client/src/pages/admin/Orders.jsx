@@ -87,7 +87,7 @@ const Orders = () => {
                   <td>{new Date(order.createdAt).toLocaleString()}</td>
                   <td>
                     <Button variant="dark" size="sm" onClick={() => handleShow(order)}>
-                     <FaRegEdit size={20} />
+                      <FaRegEdit size={20} />
                     </Button>
                   </td>
                 </tr>
