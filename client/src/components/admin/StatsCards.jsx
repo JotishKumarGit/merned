@@ -43,7 +43,7 @@ const cards = [
   },
   {
     title: "Revenue",
-    value: `$${stats.totalRevenue.toLocaleString()}`,
+    value: `₹ ${stats.totalRevenue.toLocaleString()}`,
     color: "bg-gradient-green",
   },
   {

@@ -29,8 +29,8 @@ export default function AdminAnalytics() {
         const { totalRevenue, totalOrders, averageOrderValue } = aovRes.data;
 
         setMetricCards([
-          { title: "Total Revenue", value: `$${totalRevenue.toLocaleString()}`, color  : "bg-gradient-green" },
-          { title: "Avg Order Value", value: `$${averageOrderValue.toFixed(2)}`, color  : "bg-gradient-blue" },
+          { title: "Total Revenue", value: `₹${totalRevenue.toLocaleString()}`, color  : "bg-gradient-green" },
+          { title: "Avg Order Value", value: `₹${averageOrderValue.toFixed(2)}`, color  : "bg-gradient-blue" },
           { title: "Total Orders", value: totalOrders, color  : "bg-gradient-purple" },
         ]);
 

@@ -4,7 +4,7 @@ import { placeOrder, cancelOrder, markOrderAsPaid, getMyOrders, getAllOrders, up
 import { adminOnly, protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
-// USER ROUTES
+// USER ROUTES 
 router.post('/', protect, placeOrder); // Place order
 router.put('/:id/cancel', protect, cancelOrder); // Cancel order
 router.put('/:id/pay', protect, markOrderAsPaid); // Simulate payment

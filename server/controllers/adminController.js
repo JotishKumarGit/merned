@@ -63,27 +63,28 @@ export const getMonthlyRevenue = async (req, res) => {
   try {
     const revenue = await Order.aggregate([
       {
+        $match: { status: "paid" }
+      },
+      {
         $group: {
           _id: { $month: "$createdAt" },
           totalRevenue: { $sum: "$totalAmount" }
         }
       },
-      {
-        $sort: { "_id": 1 }
-      }
+      { $sort: { "_id": 1 } }
     ]);
 
-    // Convert month numbers to names (optional)
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const getMonthlyRevenue = monthNames.map((name, index)=>{
-      const monthData = revenue.filter(r=> r._id === index + 1);
-      return{
-        month: name,
-        totalRevenue: monthData.length ? monthData[0].totalRevenue : 0
-      }
-    })
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-    res.json(getMonthlyRevenue);
+    const formatted = monthNames.map((name, index) => {
+      const data = revenue.find(r => r._id === index + 1);
+      return {
+        month: name,
+        totalRevenue: data ? data.totalRevenue : 0
+      };
+    });
+
+    res.json(formatted);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -164,6 +165,9 @@ export const getAOV = async (req, res) => {
   try {
     const result = await Order.aggregate([
       {
+        $match: { status: "paid" }
+      },
+      {
         $group: {
           _id: null,
           totalRevenue: { $sum: "$totalAmount" },
@@ -175,7 +179,13 @@ export const getAOV = async (req, res) => {
           _id: 0,
           totalRevenue: 1,
           totalOrders: 1,
-          averageOrderValue: { $divide: ["$totalRevenue", "$totalOrders"] }
+          averageOrderValue: {
+            $cond: [
+              { $eq: ["$totalOrders", 0] },
+              0,
+              { $divide: ["$totalRevenue", "$totalOrders"] }
+            ]
+          }
         }
       }
     ]);

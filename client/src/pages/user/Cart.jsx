@@ -4,16 +4,7 @@ import LoadingPage from "../../components/ui/LoaderPage";
 import api from "../../api/apiClient";
 
 export default function CartPage() {
-  const {
-    items,
-    totalPrice,
-    fetchCart,
-    updateQuantity,
-    removeFromCart,
-    clearCart,
-    loading,
-    error,
-  } = useCartStore();
+  const {items,totalPrice,fetchCart,updateQuantity,removeFromCart,clearCart,loading,error,} = useCartStore();
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
@@ -21,65 +12,61 @@ export default function CartPage() {
     fetchCart();
   }, [fetchCart]);
 
-  // 🟢 Step 1: Handle Checkout
   const handleCheckout = async () => {
-    if (items.length === 0) {
-      alert("Your cart is empty!");
+    if (!items || items.length === 0) {
+      alert("Your cart is empty");
       return;
     }
+    const orderItems = items.map((item) => ({
+      product: item.product._id,
+      qty: item.quantity,
+    }));
 
     try {
       setCheckoutLoading(true);
 
-      // 1️⃣ Create Order in backend
-      const orderRes = await api.post("/orders", {
-        orderItems: items.map((i) => ({
-          product: i.product._id,
-          qty: i.quantity,
-        })),
-        totalAmount: totalPrice,
-      });
-
+      // 1️⃣ Create Order
+      const orderRes = await api.post("/orders", { orderItems });
       const orderId = orderRes.data.order._id;
-      localStorage.setItem("currentOrderId", orderId);
 
-      // 2️⃣ Create Razorpay Order
-      const { data } = await api.post("/payment/razorpay/create-order", {
-        orderId,
-      });
+      // 2️⃣ Create Razorpay order
+      const { data } = await api.post("/payment/razorpay/create-order", { orderId });
 
       const options = {
         key: data.key,
         amount: data.amount,
         currency: data.currency,
         name: "Apna Store",
-        description: "Payment for your order",
+        description: "Order Payment",
         order_id: data.razorpayOrderId,
-        handler: async function (response) {
+
+        handler: async (response) => {
           try {
-            // 3️⃣ Verify payment on backend
-            const verifyRes = await api.post("/payment/razorpay/verify", {
+            // 3️⃣ Verify payment
+            await api.post("/payment/razorpay/verify", {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               orderId,
             });
 
-            alert("✅ Payment Success: " + verifyRes.data.message);
-            clearCart(); // frontend cart cleared
+            // 4️⃣ Clear frontend cart
+            clearCart();
+            alert("✅ Payment successful & order placed");
           } catch (err) {
-            console.error("Payment verification failed", err);
-            alert("Payment verification failed.");
+            console.error("Payment verify error:", err);
+            alert("Payment verification failed");
           }
         },
+
         theme: { color: "#3399cc" },
       };
 
-      const razor = new window.Razorpay(options);
-      razor.open();
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (err) {
       console.error("Checkout Error:", err);
-      alert("Something went wrong while starting payment.");
+      alert("Checkout failed");
     } finally {
       setCheckoutLoading(false);
     }
@@ -96,7 +83,6 @@ export default function CartPage() {
         <div className="text-center mt-4">Your cart is empty</div>
       ) : (
         <>
-          {/* 🟢 Table */}
           <div className="table-responsive shadow-sm rounded">
             <table className="table align-middle">
               <thead className="table-dark">
@@ -159,14 +145,10 @@ export default function CartPage() {
             </table>
           </div>
 
-          {/* 🟢 Total + Actions */}
           <div className="d-flex justify-content-between align-items-center mt-4">
             <h4 className="fw-bold">Total: ₹{totalPrice}</h4>
             <div>
-              <button
-                className="btn btn-outline-warning me-2"
-                onClick={clearCart}
-              >
+              <button className="btn btn-outline-warning me-2" onClick={clearCart}>
                 Clear Cart
               </button>
               <button
