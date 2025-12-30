@@ -1,7 +1,5 @@
-// src/pages/admin/Orders.jsx
-
 import React, { useEffect, useState } from "react";
-import { Table, Button, Modal, Form, Spinner } from "react-bootstrap";
+import { Table, Button, Modal, Form, Spinner, Badge } from "react-bootstrap";
 import api from "../../api/apiClient";
 import { toast } from "react-toastify";
 import { FaRegEdit } from "react-icons/fa";
@@ -13,17 +11,16 @@ const Orders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [status, setStatus] = useState("");
 
-  // Fetch all orders (admin)
+  /* ================= FETCH ALL ORDERS ================= */
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/orders"); // your backend GET /orders route
-      setOrders(data); // your backend sends array directly, as per your code
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
+      const { data } = await api.get("/orders");
+      setOrders(data);
+    } catch (err) {
       toast.error("Failed to fetch orders");
-      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,7 +28,7 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  // Open modal & set order
+  /* ================= MODAL HANDLERS ================= */
   const handleShow = (order) => {
     setSelectedOrder(order);
     setStatus(order.status);
@@ -43,58 +40,67 @@ const Orders = () => {
     setShowModal(false);
   };
 
-  // Update order status
+  /* ================= UPDATE STATUS ================= */
   const handleStatusUpdate = async () => {
     try {
       await api.put(`/orders/${selectedOrder._id}/status`, { status });
       toast.success("Order status updated");
       fetchOrders();
       handleClose();
-    } catch (error) {
-      toast.error("Failed to update order status");
-      console.error("Error updating order status:", error);
+    } catch (err) {
+      toast.error("Status update failed");
     }
+  };
+
+  /* ================= STATUS BADGE ================= */
+  const statusBadge = (status) => {
+    const map = {
+      pending: "warning",
+      paid: "primary",
+      shipped: "info",
+      delivered: "success",
+      cancelled: "danger",
+    };
+    return <Badge bg={map[status]}>{status.toUpperCase()}</Badge>;
   };
 
   return (
     <div className="container mt-4">
-      <div className="d-flex justify-content-between">
-        <div className="">
-          <h3>Order Management</h3>
-        </div>
-        <div className="mb-3">
-          <button className="btn btn-primary fs-5">Total Orders : {orders.length}</button>
-        </div>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h3>📦 Order Management</h3>
+        <Button variant="dark">Total Orders: {orders.length}</Button>
       </div>
 
       {loading ? (
-        <div className="text-center p-3"><Spinner animation="border" /></div>
+        <div className="text-center py-5">
+          <Spinner animation="border" />
+        </div>
       ) : (
         <Table striped bordered hover responsive>
-          <thead>
+          <thead className="table-dark">
             <tr>
               <th>#</th>
               <th>Order ID</th>
               <th>User</th>
-              <th>Total Amount</th>
+              <th>Amount</th>
               <th>Status</th>
-              <th>Order Date</th>
+              <th>Date</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {orders.length ? (
-              orders.map((order, idx) => (
+              orders.map((order, i) => (
                 <tr key={order._id}>
-                  <td>{idx + 1}</td>
+                  <td>{i + 1}</td>
                   <td>{order._id}</td>
                   <td>{order.user?.name || order.user?.email}</td>
                   <td>₹{order.totalAmount}</td>
-                  <td>{order.status}</td>
+                  <td>{statusBadge(order.status)}</td>
                   <td>{new Date(order.createdAt).toLocaleString()}</td>
                   <td>
-                    <Button variant="dark" size="sm" onClick={() => handleShow(order)}>
-                      <FaRegEdit size={20} />
+                    <Button size="sm" onClick={() => handleShow(order)}>
+                      <FaRegEdit />
                     </Button>
                   </td>
                 </tr>
@@ -110,44 +116,66 @@ const Orders = () => {
         </Table>
       )}
 
-      {/* Modal for Order Details and Status Update */}
+      {/* ================= ORDER DETAILS MODAL ================= */}
       <Modal show={showModal} onHide={handleClose} size="lg" centered>
         <Modal.Header closeButton>
-          <Modal.Title>Order Details</Modal.Title>
+          <Modal.Title>🧾 Order Details</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           {selectedOrder && (
             <>
-              <h5>Order ID: {selectedOrder._id}</h5>
-              <p>
-                <strong>User:</strong> {selectedOrder.user?.name || selectedOrder.user?.email}
-              </p>
-              <p>
-                <strong>Status:</strong> {selectedOrder.status}
-              </p>
-              <p>
-                <strong>Order Date:</strong> {new Date(selectedOrder.createdAt).toLocaleString()}
-              </p>
+              <h6>Order ID: {selectedOrder._id}</h6>
+              <p><b>User:</b> {selectedOrder.user?.name} ({selectedOrder.user?.email})</p>
+              <p><b>Status:</b> {statusBadge(selectedOrder.status)}</p>
 
-              <Table striped bordered>
+              {/* SHIPPING ADDRESS */}
+              <div className="border rounded p-3 mb-3">
+                <h6>📍 Shipping Address</h6>
+                <p className="mb-1">{selectedOrder.shippingAddress.fullName}</p>
+                <p className="mb-1">{selectedOrder.shippingAddress.phone}</p>
+                <p className="mb-1">
+                  {selectedOrder.shippingAddress.addressLine},{" "}
+                  {selectedOrder.shippingAddress.city},{" "}
+                  {selectedOrder.shippingAddress.state} -{" "}
+                  {selectedOrder.shippingAddress.pincode}
+                </p>
+              </div>
+
+              {/* PRODUCTS */}
+              <Table bordered size="sm">
                 <thead>
                   <tr>
                     <th>Product</th>
-                    <th>Quantity</th>
+                    <th>Qty</th>
                     <th>Price</th>
                   </tr>
                 </thead>
                 <tbody>
                   {selectedOrder.orderItems.map((item, idx) => (
                     <tr key={idx}>
-                      <td>{item.product?.name || item.product}</td>
+                      <td>{item.product?.name}</td>
                       <td>{item.qty}</td>
-                      <td>₹{item.product?.price || item.price}</td>
+                      <td>₹{item.product?.price}</td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
 
+              {/* PAYMENT INFO */}
+              <div className="border rounded p-3 mb-3">
+                <h6>💳 Payment Info</h6>
+                {selectedOrder.paymentInfo?.razorpay_payment_id ? (
+                  <>
+                    <p className="mb-1">Payment ID: {selectedOrder.paymentInfo.razorpay_payment_id}</p>
+                    <p className="mb-1">Paid At: {new Date(selectedOrder.paymentInfo.paidAt).toLocaleString()}</p>
+                  </>
+                ) : (
+                  <p className="text-danger">Payment Pending</p>
+                )}
+              </div>
+
+              {/* UPDATE STATUS */}
               <Form.Group>
                 <Form.Label>Update Status</Form.Label>
                 <Form.Select value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -161,13 +189,10 @@ const Orders = () => {
             </>
           )}
         </Modal.Body>
+
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleStatusUpdate}>
-            Update Status
-          </Button>
+          <Button variant="secondary" onClick={handleClose}>Close</Button>
+          <Button variant="success" onClick={handleStatusUpdate}>Update Status</Button>
         </Modal.Footer>
       </Modal>
     </div>
