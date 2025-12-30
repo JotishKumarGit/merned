@@ -14,7 +14,20 @@ export const placeOrder = async (req, res) => {
 
   try {
     const userId = req.user._id;
-    const { orderItems } = req.body;
+    const { orderItems, shippingAddress } = req.body;
+
+    // ✅ ADDRESS VALIDATION
+    if (
+      !shippingAddress ||
+      !shippingAddress.fullName ||
+      !shippingAddress.phone ||
+      !shippingAddress.addressLine ||
+      !shippingAddress.city ||
+      !shippingAddress.state ||
+      !shippingAddress.pincode
+    ) {
+      return res.status(400).json({ message: "Shipping address is required" });
+    }
 
     if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({ message: "No order items provided" });
@@ -25,16 +38,12 @@ export const placeOrder = async (req, res) => {
 
     for (const item of orderItems) {
       const product = await Product.findById(item.product).session(session);
-      if (!product) {
-        throw new Error("Product not found");
-      }
+      if (!product) throw new Error("Product not found");
 
       const quantity = Number(item.qty || item.quantity || 0);
-      if (quantity <= 0) {
-        throw new Error(`Invalid quantity for ${product.name}`);
-      }
+      if (quantity <= 0) throw new Error("Invalid quantity");
 
-      // ✅ ONLY CHECK STOCK (DO NOT REDUCE HERE)
+      // ✅ ONLY CHECK STOCK
       if (product.stock < quantity) {
         throw new Error(`Not enough stock for ${product.name}`);
       }
@@ -52,6 +61,7 @@ export const placeOrder = async (req, res) => {
         {
           user: userId,
           orderItems: processedItems,
+          shippingAddress, // ✅ ADDRESS STORED HERE
           totalAmount,
           status: "pending",
         },
@@ -70,10 +80,7 @@ export const placeOrder = async (req, res) => {
     await session.abortTransaction();
     session.endSession();
     console.error("Place Order Error:", error.message);
-
-    res.status(500).json({
-      message: error.message || "Order placement failed",
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 

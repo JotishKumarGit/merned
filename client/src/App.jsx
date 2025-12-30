@@ -9,7 +9,6 @@ import "aos/dist/aos.css";
 import Home from "./pages/user/Home";
 import ProductDetails from "./pages/user/ProductDetails";
 import Cart from "./pages/user/Cart";
-import Checkout from "./pages/user/Checkout";
 import Login from "./pages/user/Login";
 import Register from "./pages/user/Register";
 
@@ -54,7 +53,6 @@ function App() {
         <Route path="/" element={<UserLayout><Home /></UserLayout>} />
         <Route path="/product/:id" element={<UserLayout><ProductDetails /></UserLayout>} />
         <Route path="/cart" element={<UserLayout><Cart /></UserLayout>} />
-        <Route path="/checkout" element={<UserLayout><ProtectedRoute><Checkout /></ProtectedRoute></UserLayout>} />
         <Route path="/login" element={<UserLayout><PublicRoute><Login /></PublicRoute></UserLayout>} />
         <Route path="/register" element={<UserLayout><PublicRoute><Register /></PublicRoute></UserLayout>} />
         {/* <Route path="/profile" element={<UserLayout><ProtectedRoute><Profile /></ProtectedRoute></UserLayout>} /> */}

@@ -25,7 +25,14 @@ const Users = () => {
     <div className="container mt-4">
       <Card>
         <Card.Body>
-          <h4 className="mb-3">All Users</h4>
+          <div className="d-flex justify-content-between">
+            <div className="">
+              <h4 className="mb-3">All Users</h4>
+            </div>
+            <div className="mb-3">
+              <button className="btn btn-primary fs-5">Total Users : {users.length}</button>
+            </div>
+          </div>
           {loading ? (
             <div className="text-center p-3">
               <Spinner animation="border" />
