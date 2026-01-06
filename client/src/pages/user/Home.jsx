@@ -6,14 +6,18 @@ import FiltersPanel from "../../components/ui/FiltersPanel";
 import ProductCard from "../../components/ui/ProductCard";
 import Pagination from "../../components/ui/Pagination";
 import LoadingPage from '../../components/ui/LoaderPage';
-import baner_1 from '/baner_1.png';
-import baner_2 from '/baner_new_2.jpg';
-import baner_3 from '/baner_new_3.jpg';
+import Banner from "./Banner";
+import CategorySlider from "../user/CategorySlider";
+import WhyChooseUs from "./WhyChooseUs";
+import OfferBanner from "./OfferBanner";
+import Testimonials from "./Testimonials";
+import Newsletter from "./Newsletter";
+
 
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState([]);
-  const [catProducts, setCatProducts] = useState({}); 
+  const [catProducts, setCatProducts] = useState({});
   const [data, setData] = useState({ products: [], total: 0, page: 1, pages: 1 });
   const [loading, setLoading] = useState(false);
 
@@ -66,7 +70,6 @@ export default function Home() {
     };
     fetchProducts();
   }, [searchParams]);
-
   // update a single param
   const updateParam = (key, value) => {
     const params = new URLSearchParams(searchParams);
@@ -80,28 +83,9 @@ export default function Home() {
   return (
     <div className="container-fluid p-0">
 
-      <div id="carouselExample" className="carousel slide">
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img src={baner_1} style={{height:'300px',width:'100%' }} className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src={baner_2} style={{height:'300px',width:'100%' }} className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src={baner_3} style={{height:'300px',width:'100%' }} className="d-block w-100" alt="..." />
-          </div>
-        </div>
-        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-          <span className="carousel-control-prev-icon" aria-hidden="true" />
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-          <span className="carousel-control-next-icon" aria-hidden="true" />
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div>
-      
+      <Banner />
+      <CategorySlider categories={categories} active={getParam("category")} onSelect={(id) => updateParam("category", id)} />
+
       <div className="container mt-4">
         <div className="row">
           <div className="col-md-3">
@@ -157,6 +141,12 @@ export default function Home() {
         ))}
 
       </div>
+
+      <WhyChooseUs />
+      <OfferBanner />
+      <Testimonials />
+      <Newsletter />
+
     </div>
   );
 }

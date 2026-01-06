@@ -42,7 +42,7 @@ function Header() {
       >
         <div className="container-fluid">
           {/* Brand */}
-          <Link className="navbar-brand fw-bold text-primary fs-4" to="/">Apna Store</Link>
+          <Link className="navbar-brand fw-bold text-primary fs-4" to="/">ShopEase</Link>
 
           {/* Toggler for mobile */}
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

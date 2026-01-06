@@ -1,0 +1,115 @@
+/* category slider css */
+.category-slider-wrapper {
+  padding: 20px 30px;
+  background: #f4dbdb;
+}
+
+.category-item {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.category-item:hover {
+  transform: scale(1.08);
+}
+
+.category-img-wrapper {
+  width: 110px;
+  height: 110px;
+  margin: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.category-item.active .category-img-wrapper {
+  border-color: #0d6efd;
+  box-shadow: 0 0 12px rgba(13, 110, 253, 0.5);
+}
+
+.category-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-name {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+
+/* why chose us css */
+.why-choose-us {
+  padding: 40px 0;
+}
+
+.why-card {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.why-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  opacity: 0;
+  transition: 0.4s ease;
+  z-index: 0;
+}
+
+.why-card:hover::before {
+  opacity: 1;
+}
+
+.why-card * {
+  position: relative;
+  z-index: 1;
+}
+
+.why-card:hover {
+  transform: translateY(-12px);
+}
+
+.why-card:hover h5,
+.why-card:hover p {
+  color: #fff !important;
+}
+
+.icon-box {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  border-radius: 50%;
+  background: rgba(13, 110, 253, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s ease;
+}
+
+.icon-box i {
+  font-size: 32px;
+  color: #0d6efd;
+}
+
+.why-card:hover .icon-box {
+  background: #fff;
+}
+
+@media (max-width: 576px) {
+  .why-card {
+    padding: 25px 15px;
+  }
+}

@@ -27,7 +27,7 @@ export const createCategory = async (req, res) => {
 export const getAllCategories = async (req, res) => {
   try {
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 9;
+    const limit = Number(req.query.limit) || 0;
     const skip = (page - 1) * limit;
 
     const totalCategories = await Category.countDocuments();
