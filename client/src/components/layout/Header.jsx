@@ -37,9 +37,7 @@ function Header() {
       </div>
 
       {/* 🔹 Main Navbar */}
-      <nav
-        className={`navbar navbar-expand-lg shadow-sm py-3 ${theme === "dark" ? "navbar-dark bg-dark" : "navbar-light bg-white"} px-3`}
-      >
+      <nav className={`navbar navbar-expand-lg shadow-sm py-3 ${theme === "dark" ? "navbar-dark bg-dark" : "navbar-light bg-white"} px-3`} >
         <div className="container-fluid">
           {/* Brand */}
           <Link className="navbar-brand fw-bold text-primary fs-4" to="/">ShopEase</Link>
@@ -70,47 +68,29 @@ function Header() {
 
               {/* Theme Toggle */}
               <button className="btn btn-outline-secondary btn-sm me-3" onClick={toggleTheme}>
-                {theme === "dark" ? (
-                  <CiDark size={28} />
-                ) : (
-                  <MdOutlineLightMode size={28} />
-                )}
+                {theme === "dark" ? ( <CiDark size={28} /> ) : ( <MdOutlineLightMode size={28} /> )}
               </button>
 
               {/* Auth Buttons */}
               {!user ? (
                 <>
-                  <Link className="btn btn-outline-primary me-2" to="/login">
-                    Login
-                  </Link>
-                  <Link className="btn btn-primary" to="/register">
-                    Register
-                  </Link>
+                  <Link className="btn btn-outline-primary me-2" to="/login"> Login</Link>
+                  <Link className="btn btn-primary" to="/register">Register</Link>
                 </>
               ) : (
                 <li className="nav-item dropdown list-unstyled">
                   <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" >
-                    <img
-                      src={user?.profilePic || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
-                      alt="avatar" width="30" height="30" className="rounded-circle" />
+                    <img src={user?.profilePic || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} alt="avatar" width="30" height="30" className="rounded-circle" />
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end">
                     {user.role === "user" && (
-                      <li>
-                        <Link className="dropdown-item" to="/user/dashboard/">User Dashboard</Link>
-                      </li>
+                      <li> <Link className="dropdown-item" to="/user/dashboard/">User Dashboard</Link></li>
                     )}
                     {user?.role === "admin" && (
-                      <li>
-                        <Link className="dropdown-item" to="/admin/dashboard">Admin Panel</Link>
-                      </li>
+                      <li> <Link className="dropdown-item" to="/admin/dashboard">Admin Panel</Link></li>
                     )}
-                    <li>
-                      <hr className="dropdown-divider" />
-                    </li>
-                    <li>
-                      <button className="dropdown-item" onClick={logout}>Logout</button>
-                    </li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <li><button className="dropdown-item" onClick={logout}>Logout</button></li>
                   </ul>
                 </li>
               )}
