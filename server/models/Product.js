@@ -14,6 +14,11 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please provide price"],
     },
+    subCategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      default: null,
+    },
     stock: {
       type: Number,
       required: [true, "Please provide stock"],
@@ -25,44 +30,44 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      type: String, 
+      type: String,
       required: true,
     },
     reviews: [
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    rating: {
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        rating: {
+          type: Number,
+          required: true,
+          min: 1,
+          max: 5,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        }
+      }
+    ],
+    numReviews: {
       type: Number,
-      required: true,
-      min: 1,
-      max: 5,
+      default: 0,
     },
-    comment: {
-      type: String,
-      required: true,
+    averageRating: {
+      type: Number,
+      default: 0,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    }
-  }
-],
-numReviews: {
-  type: Number,
-  default: 0,
-},
-averageRating: {
-  type: Number,
-  default: 0,
-},
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
