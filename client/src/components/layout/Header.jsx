@@ -51,11 +51,10 @@ function Header() {
           🔹 MAIN NAVBAR
       ====================================================== */}
       <nav
-        className={`navbar navbar-expand-lg shadow-sm py-3 ${
-          theme === "dark"
-            ? "navbar-dark bg-dark"
-            : "navbar-light bg-white"
-        }`}
+        className={`navbar navbar-expand-lg shadow-sm py-3 ${theme === "dark"
+          ? "navbar-dark bg-dark"
+          : "navbar-light bg-white"
+          }`}
       >
         <div className="container-fluid">
 
