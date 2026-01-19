@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useCartStore } from "../../stores/cartStore";
@@ -8,35 +8,69 @@ import "react-toastify/dist/ReactToastify.css";
 
 function ProductDetails() {
   const { id } = useParams();
+
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const { addToCart } = useCartStore();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true, mirror: false });
+    AOS.init({ duration: 1000, once: true });
 
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/products/${id}`);
+        const res = await fetch(
+          `http://localhost:5000/api/products/${id}`
+        );
         const data = await res.json();
         setProduct(data);
+
+        if (data?.category?._id) {
+          fetchRelatedProducts(data.category._id, data._id);
+        }
+
         setTimeout(() => AOS.refresh(), 100);
-      } catch (err) {
-        console.error("Error fetching product:", err);
+      } catch (error) {
+        console.error("Product fetch error:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProduct();
   }, [id]);
 
+  const fetchRelatedProducts = async (categoryId, currentProductId) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/products?category=${categoryId}`
+      );
+      const data = await res.json();
+
+      const filtered = data.filter(
+        (item) => item._id !== currentProductId
+      );
+
+      setRelatedProducts(filtered.slice(0, 4));
+    } catch (error) {
+      console.error("Related products error:", error);
+    }
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    toast.success(`${product.name} added to cart 🛒`, {
+      position: "top-right",
+      autoClose: 3000,
+      theme: "colored",
+    });
+  };
+
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" />
       </div>
     );
   }
@@ -46,86 +80,127 @@ function ProductDetails() {
   }
   const imageSrc = product.image ? `http://localhost:5000${product.image}` : "/placeholder.png";
   const categoryName = typeof product.category === "object" ? product.category?.name : product.category;
-  const description = typeof product.description === "string" ? product.description : JSON.stringify(product.description || "No description available");
-
-  const handleAddToCart = () => {
-    addToCart(product);
-    toast.success(`${product.name} added to cart 🛒`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      theme: "colored",
-    });
-  };
 
   return (
     <>
-      {/* 🔥 Hero Section */}
+      {/* 🔥 HERO BANNER */}
       <div
-        className="text-white text-center d-flex flex-column justify-content-center align-items-center shadow-lg" style={{ minHeight: "50vh", background: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),url(${imageSrc}) center/cover no-repeat`, }}>
-        <h1 className="fw-bold display-4" data-aos="fade-down" data-aos-delay="200" > {product.name}</h1>
-        <p className="lead mt-3" data-aos="fade-up" data-aos-delay="400" style={{ maxWidth: "700px" }} >
-          {description.length > 120 ? description.substring(0, 120) + "..." : description}
+        className="text-white text-center d-flex flex-column justify-content-center align-items-center"
+        style={{
+          minHeight: "50vh",
+          background: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+          url(${imageSrc}) center/cover no-repeat`,
+        }}
+      >
+        <h1 className="fw-bold display-5" data-aos="fade-down">
+          {product.name}
+        </h1>
+        <p className="lead mt-3" style={{ maxWidth: "700px" }}>
+          {product.description?.substring(0, 120)}...
         </p>
       </div>
 
-      {/* 🔥 Main Section */}
-      <div className="container py-5" data-aos="fade-up">
+      {/* 🔥 PRODUCT DETAILS */}
+      <div className="container py-5">
         <div className="row g-5 align-items-center">
-          {/* Left: Product Image */}
           <div className="col-md-6 text-center">
-            <img src={imageSrc} alt={product.name} className="img-fluid rounded-4 shadow-lg border" style={{ maxHeight: "450px", objectFit: "contain" }} data-aos="zoom-in" />
+            <img
+              src={imageSrc}
+              alt={product.name}
+              className="img-fluid rounded-4 shadow"
+              style={{ maxHeight: "450px", objectFit: "contain" }}
+            />
           </div>
 
-          {/* Right: Product Info */}
-          <div className="col-md-6" data-aos="fade-left">
-            <h2 className="fw-bold mb-3">{product.name}</h2>
-            <p className="text-muted mb-2"> Category:{" "}
-              <span className="fw-semibold">{categoryName || "N/A"}</span>
+          <div className="col-md-6">
+            <h2 className="fw-bold">{product.name}</h2>
+
+            <p className="text-muted">
+              Category:{" "}
+              <span className="fw-semibold">{categoryName}</span>
             </p>
 
-            <div className="mb-3 text-warning">
-              ⭐⭐⭐⭐☆ <small className="text-muted">(120 reviews)</small>
-            </div>
-            <h3 className="text-success fw-bold mb-3">₹{product.price || 0}</h3>
-            <p className="text-secondary mb-4" style={{ lineHeight: "1.6" }}>{description}</p>
+            <h3 className="text-success fw-bold">
+              ₹{product.price}
+            </h3>
 
-            <p className={`fw-semibold ${product.stock > 0 ? "text-success" : "text-danger"}`}> {product.stock > 0 ? "✔ In Stock" : "❌ Out of Stock"}</p>
+            <p className="mt-3">{product.description}</p>
 
-            {/* Buttons */}
-            <div className="d-flex flex-wrap gap-3 mt-4">
-              <button className="btn btn-primary btn-lg rounded-pill px-4 shadow-sm" disabled={product.stock === 0} onClick={handleAddToCart}>
+            <p
+              className={`fw-semibold ${
+                product.stock > 0 ? "text-success" : "text-danger"
+              }`}
+            >
+              {product.stock > 0 ? "✔ In Stock" : "❌ Out of Stock"}
+            </p>
+
+            <div className="d-flex gap-3 mt-4">
+              <button
+                className="btn btn-primary rounded-pill px-4"
+                disabled={product.stock === 0}
+                onClick={handleAddToCart}
+              >
                 🛒 Add to Cart
               </button>
-              <button className="btn btn-outline-success btn-lg rounded-pill px-4 shadow-sm">
-                ❤️ Wishlist
-              </button>
-              <Link to="/" className="btn btn-outline-secondary btn-lg rounded-pill px-4 shadow-sm" > ⬅ Back to Products </Link>
+
+              <Link
+                to="/"
+                className="btn btn-outline-secondary rounded-pill px-4"
+              >
+                ⬅ Back
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 🔥 Related Products */}
-      <div className="bg-light py-5 mt-5">
-        <div className="container" data-aos="fade-up">
-          <h3 className="fw-bold mb-4">You may also like</h3>
+      {/* 🔥 RELATED PRODUCTS */}
+      <div className="bg-light py-5">
+        <div className="container">
+          <h3 className="fw-bold mb-4">Related Products</h3>
+
           <div className="row g-4">
-            {[1, 2, 3].map((item) => (
-              <div className="col-md-4" key={item}>
-                <div className="card shadow-sm border-0 rounded-4 h-100">
-                  <img src="/placeholder.png" className="card-img-top rounded-top-4" alt="Related Product" />
-                  <div className="card-body text-center">
-                    <h5 className="card-title">Sample Product {item}</h5>
-                    <p className="text-success fw-semibold">₹999</p>
-                    <button className="btn btn-sm btn-primary rounded-pill"> View Details </button>
+            {relatedProducts.length > 0 ? (
+              relatedProducts.map((item) => {
+                const img = item.image
+                  ? `http://localhost:5000${item.image}`
+                  : "/placeholder.png";
+
+                return (
+                  <div className="col-md-3" key={item._id}>
+                    <div className="card h-100 shadow-sm border-0 rounded-4">
+                      <img
+                        src={img}
+                        className="card-img-top"
+                        alt={item.name}
+                        style={{
+                          height: "200px",
+                          objectFit: "contain",
+                        }}
+                      />
+
+                      <div className="card-body text-center">
+                        <h6 className="fw-semibold">{item.name}</h6>
+                        <p className="text-success fw-bold">
+                          ₹{item.price}
+                        </p>
+
+                        <Link
+                          to={`/product/${item._id}`}
+                          className="btn btn-sm btn-primary rounded-pill"
+                        >
+                          View Details
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                );
+              })
+            ) : (
+              <p className="text-muted">
+                No related products found
+              </p>
+            )}
           </div>
         </div>
       </div>

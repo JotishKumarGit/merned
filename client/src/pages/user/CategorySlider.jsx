@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import "./User.css";
 
-const CategorySlider = ({ categories = [], active, onSelect }) => {
+const CategorySlider = ({ categories = [], active, onSelect, theme = "light" }) => {
   const settings = {
     dots: false,
     infinite: true,
@@ -20,21 +20,15 @@ const CategorySlider = ({ categories = [], active, onSelect }) => {
   };
 
   return (
-    <div className="category-slider-wrapper" style={{ backgroundColor: "" }} >
-      <h2 className="align-items-center text-center py-5">Top Categories</h2>
+    <div className={`category-slider-wrapper ${theme === "dark" ? "bg-dark text-light" : "bg-light"}`}>
+      <h2 className="text-center py-5">Top Categories</h2>
+
       <Slider {...settings}>
         {categories.map((cat) => (
           <div key={cat._id}>
-            <div
-              className={`category-item ${active === cat._id ? "active" : ""
-                }`}
-              onClick={() => onSelect(cat._id)}
-            >
+            <div className={`category-item ${active === cat._id ? "active" : ""}`} onClick={() => onSelect(cat._id)}>
               <div className="category-img-wrapper">
-                <img
-                  src={`${import.meta.env.VITE_API_URL}${cat.image}`}
-                  alt={cat.name}
-                />
+                <img src={`${import.meta.env.VITE_API_URL}${cat.image}`} alt={cat.name} />
               </div>
               <p className="category-name">{cat.name}</p>
             </div>

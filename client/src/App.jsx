@@ -14,6 +14,8 @@ import ProductDetails from "./pages/user/ProductDetails";
 import Cart from "./pages/user/Cart";
 import Login from "./pages/user/Login";
 import Register from "./pages/user/Register";
+import Shop from "./pages/user/Shop";
+import Search from "./pages/user/Search";
 
 // only for admin 
 import Dashboard from "./pages/admin/Dashboard";
@@ -59,6 +61,8 @@ function App() {
         <Route path="/cart" element={<UserLayout><Cart /></UserLayout>} />
         <Route path="/login" element={<UserLayout><PublicRoute><Login /></PublicRoute></UserLayout>} />
         <Route path="/register" element={<UserLayout><PublicRoute><Register /></PublicRoute></UserLayout>} />
+        <Route path="/shop" element={<UserLayout><Shop /></UserLayout>} />
+        <Route path="/search/" element={<UserLayout><Search /></UserLayout>} />
         {/* <Route path="/profile" element={<UserLayout><ProtectedRoute><Profile /></ProtectedRoute></UserLayout>} /> */}
 
         {/* user dashboard route */}

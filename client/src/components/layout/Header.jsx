@@ -29,7 +29,7 @@ function Header() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchText.trim()) return;
-    navigate(`/?keyword=${encodeURIComponent(searchText)}`);
+    navigate(`/search?keyword=${encodeURIComponent(searchText)}`);
     setSearchText("");
   };
 

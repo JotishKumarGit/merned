@@ -5,7 +5,7 @@ import api from "../../api/apiClient";
 import AddressModal from "./AddressModal";
 
 export default function CartPage() {
-  const {items,totalPrice,fetchCart,updateQuantity,removeFromCart,clearCart,loading,error} = useCartStore();
+  const { items, totalPrice, fetchCart, updateQuantity, removeFromCart, clearCart, loading, error } = useCartStore();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
 
@@ -13,10 +13,6 @@ export default function CartPage() {
     fetchCart();
   }, [fetchCart]);
 
-  /* =====================================================
-     STEP 1️⃣ Checkout button click
-     Sirf address modal open hoga
-  ===================================================== */
   const handleCheckoutClick = () => {
     if (!items || items.length === 0) {
       alert("Your cart is empty");
@@ -24,10 +20,6 @@ export default function CartPage() {
     }
     setShowAddressModal(true);
   };
-
-  /* =====================================================
-     STEP 2️⃣ Address submit ke baad actual checkout
-  ===================================================== */
   const handleAddressConfirm = async (address) => {
     const orderItems = items.map((item) => ({
       product: item.product._id,
@@ -40,7 +32,7 @@ export default function CartPage() {
       // 1️⃣ Create Order with address
       const orderRes = await api.post("/orders", {
         orderItems,
-        shippingAddress: address, // Address backend bhej rahe
+        shippingAddress: address,
       });
 
       const orderId = orderRes.data.order._id;
@@ -71,7 +63,7 @@ export default function CartPage() {
               orderId,
             });
 
-            clearCart(); // 🧹 frontend cart clear
+            clearCart();
             setShowAddressModal(false);
             alert("✅ Payment successful & order placed");
           } catch (err) {
@@ -122,63 +114,19 @@ export default function CartPage() {
               <tbody>
                 {items.map((item) => (
                   <tr key={item.product._id}>
-                    <td>
-                      <img
-                        src={item.product.image || "/placeholder.png"}
-                        alt={item.product.name}
-                        width="70"
-                        className="rounded"
-                      />
-                    </td>
+                    <td> <img src={item.product.image || "/placeholder.png"} alt={item.product.name} width="70" className="rounded" /> </td>
                     <td>{item.product.name}</td>
                     <td>₹{item.product.price}</td>
-
                     <td>
                       <div className="d-flex align-items-center">
-                        <button
-                          className="btn btn-sm btn-outline-secondary"
-                          onClick={() =>
-                            updateQuantity(
-                              item.product._id,
-                              item.quantity - 1
-                            )
-                          }
-                          disabled={item.quantity <= 1}
-                        >
-                          -
-                        </button>
-
-                        <span className="mx-2 fw-bold">
-                          {item.quantity}
-                        </span>
-
-                        <button
-                          className="btn btn-sm btn-outline-secondary"
-                          onClick={() =>
-                            updateQuantity(
-                              item.product._id,
-                              item.quantity + 1
-                            )
-                          }
-                        >
-                          +
-                        </button>
+                        <button className="btn btn-sm btn-outline-secondary" onClick={() => updateQuantity(item.product._id, item.quantity - 1)} disabled={item.quantity <= 1} >-</button>
+                        <span className="mx-2 fw-bold"> {item.quantity}</span>
+                        <button className="btn btn-sm btn-outline-secondary" onClick={() => updateQuantity(item.product._id, item.quantity + 1)}>+</button>
                       </div>
                     </td>
-
+                    <td> ₹{item.product.price * item.quantity}</td>
                     <td>
-                      ₹{item.product.price * item.quantity}
-                    </td>
-
-                    <td>
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() =>
-                          removeFromCart(item.product._id)
-                        }
-                      >
-                        Remove
-                      </button>
+                      <button className="btn btn-sm btn-danger" onClick={() => removeFromCart(item.product._id)}> Remove</button>
                     </td>
                   </tr>
                 ))}
@@ -190,32 +138,15 @@ export default function CartPage() {
           <div className="d-flex justify-content-between align-items-center mt-4">
             <h4 className="fw-bold">Total: ₹{totalPrice}</h4>
             <div>
-              <button
-                className="btn btn-outline-warning me-2"
-                onClick={clearCart}
-              >
-                Clear Cart
-              </button>
-
-              <button
-                className="btn btn-success"
-                onClick={handleCheckoutClick}
-                disabled={checkoutLoading}
-              >
-                Checkout →
-              </button>
+              <button className="btn btn-outline-warning me-2" onClick={clearCart}>Clear Cart</button>
+              <button className="btn btn-success" onClick={handleCheckoutClick} disabled={checkoutLoading}>Checkout →</button>
             </div>
           </div>
         </>
       )}
 
       {/* ================= ADDRESS MODAL ================= */}
-      <AddressModal
-        show={showAddressModal}
-        loading={checkoutLoading}
-        onClose={() => setShowAddressModal(false)}
-        onConfirm={handleAddressConfirm}
-      />
+      <AddressModal show={showAddressModal} loading={checkoutLoading} onClose={() => setShowAddressModal(false)} onConfirm={handleAddressConfirm} />
     </div>
   );
 }

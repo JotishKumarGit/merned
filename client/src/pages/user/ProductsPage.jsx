@@ -50,11 +50,7 @@ export default function ProductsPage() {
               products.map((p) => (
                 <div className="col-md-4 mb-3" key={p._id}>
                   <div className="card h-100">
-                    <img
-                      src={p.image || "https://via.placeholder.com/200"}
-                      className="card-img-top"
-                      alt={p.name}
-                    />
+                    <img src={p.image || "https://via.placeholder.com/200"} className="card-img-top" alt={p.name} />
                     <div className="card-body">
                       <h6>{p.name}</h6>
                       <p>₹{p.price}</p>

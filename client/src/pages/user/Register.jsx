@@ -13,7 +13,7 @@ function Register() {
 
   // Form state
   const [formData, setFormData] = useState({
-    name: "",email: "",password: "",confirmPassword: "",profilePic: null,
+    name: "", email: "", password: "", confirmPassword: "", profilePic: null,
   });
 
   const [loading, setLoading] = useState(false);
@@ -59,7 +59,7 @@ function Register() {
       });
 
       if (response?.data?.success) {
-        
+
         localStorage.setItem("token", response.data.token);
         toast.success(response.data.message || "Registration successful! 🎉");
         navigate("/login");
@@ -75,31 +75,23 @@ function Register() {
   };
 
   return (
-    <div
-      className={`container-fluid d-flex justify-content-center py-2 align-items-center min-vh-100 ${theme === "dark" ? "bg-dark text-light" : "bg-light"
-        }`}
-    >
+    <div className={`container-fluid d-flex justify-content-center py-2 align-items-center min-vh-100 ${theme === "dark" ? "bg-dark text-light" : "bg-light"}`}>
       <div className="row w-100 justify-content-center">
         <div className="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-          <div
-            className={`card shadow p-4 ${theme === "dark" ? "bg-secondary text-light" : "bg-white"
-              }`}
-          >
+          <div className={`card shadow p-4 ${theme === "dark" ? "bg-secondary text-light" : "bg-white"}`} >
             <h2 className="text-center mb-4">Create Account</h2>
 
             <form onSubmit={handleSubmit} encType="multipart/form-data">
               {/* Full Name */}
               <div className="mb-3">
                 <label className="form-label">Full Name</label>
-                <input type="text"
-                  name="name" className="form-control" placeholder="Enter your name" value={formData.name} onChange={handleChange} />
+                <input type="text" name="name" className="form-control" placeholder="Enter your name" value={formData.name} onChange={handleChange} />
               </div>
 
               {/* Email */}
               <div className="mb-3">
                 <label className="form-label">Email Address</label>
-                <input
-                  type="email" name="email" className="form-control" placeholder="Enter your email" value={formData.email} onChange={handleChange} />
+                <input type="email" name="email" className="form-control" placeholder="Enter your email" value={formData.email} onChange={handleChange} />
               </div>
 
               {/* Password */}
@@ -123,7 +115,6 @@ function Register() {
               {/* Submit Button */}
               <button type="submit" className="btn btn-primary w-100" disabled={loading}>{loading ? "Registering..." : "Register"}</button>
             </form>
-
             <p className="text-center mt-3">Already have an account? <Link to="/login">Login</Link></p>
           </div>
         </div>

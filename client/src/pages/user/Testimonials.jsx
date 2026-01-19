@@ -22,18 +22,12 @@ export default function Testimonials() {
 
       <div className="row g-4">
         {reviews.map((r, i) => (
-          <motion.div
-            key={i}
-            className="col-md-4"
-            whileHover={{ y: -10 }}
-          >
+          <motion.div key={i} className="col-md-4" whileHover={{ y: -10 }} >
             <div className="card shadow-sm h-100 border-0 rounded-4">
               <div className="card-body">
                 <p className="text-muted">"{r.text}"</p>
                 <h6 className="fw-bold mt-3 mb-0">{r.name}</h6>
-                <div className="text-warning">
-                  ★★★★☆
-                </div>
+                <div className="text-warning"> ★★★★☆ </div>
               </div>
             </div>
           </motion.div>

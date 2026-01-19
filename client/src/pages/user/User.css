@@ -1,9 +1,11 @@
-/* category slider css */
+/* ================= CATEGORY SLIDER ================= */
+
 .category-slider-wrapper {
   padding: 20px 30px;
-  background: #f4dbdb;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* ---------- ITEM ---------- */
 .category-item {
   text-align: center;
   cursor: pointer;
@@ -14,16 +16,19 @@
   transform: scale(1.08);
 }
 
+/* ---------- IMAGE ---------- */
 .category-img-wrapper {
   width: 110px;
   height: 110px;
   margin: auto;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid #eee;
+  border: 3px solid #dee2e6;
   transition: all 0.3s ease;
+  background: #fff;
 }
 
+/* Active */
 .category-item.active .category-img-wrapper {
   border-color: #0d6efd;
   box-shadow: 0 0 12px rgba(13, 110, 253, 0.5);
@@ -35,11 +40,28 @@
   object-fit: cover;
 }
 
+/* ---------- TEXT ---------- */
 .category-name {
   margin-top: 10px;
   font-weight: 600;
   font-size: 14px;
-  color: #333;
+  color: #212529;
+}
+
+/* ================= DARK MODE ================= */
+
+.bg-dark .category-img-wrapper {
+  background: #212529;
+  border-color: #495057;
+}
+
+.bg-dark .category-name {
+  color: #f8f9fa;
+}
+
+.bg-dark .category-item.active .category-img-wrapper {
+  border-color: #0d6efd;
+  box-shadow: 0 0 14px rgba(13, 110, 253, 0.8);
 }
 
 
