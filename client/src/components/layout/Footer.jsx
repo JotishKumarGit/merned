@@ -18,18 +18,10 @@ function Footer() {
       <div className="container text-center">
         {/* Navigation Links */}
         <div className="mb-3">
-          <Link to="/" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}>
-            Home
-          </Link>
-          <Link to="/products" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}>
-            Products
-          </Link>
-          <Link to="/cart" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}>
-            Cart
-          </Link>
-          <Link to="/contact" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}>
-            Contact
-          </Link>
+          <Link to="/" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}> Home</Link>
+          <Link to="/products" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}>Products</Link>
+          <Link to="/cart" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}>Cart</Link>
+          <Link to="/contact" className={`mx-2 text-decoration-none ${theme === "dark" ? "text-light" : "text-dark"}`}> Contact</Link>
         </div>
 
         {/* Footer Text */}
@@ -37,7 +29,7 @@ function Footer() {
           © {currentYear} My E-Commerce Website. All rights reserved.
         </p>
         <p className="mb-0">
-          Built with ❤️ using MERN Stack
+          Built with ❤️ using MERN Stack With Jk
         </p>
       </div>
     </motion.footer>

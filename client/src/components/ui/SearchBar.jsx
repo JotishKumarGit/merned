@@ -15,12 +15,7 @@ export default function SearchBar({ initial = "", onSearch }) {
 
   return (
     <div className="mb-3">
-      <input
-        className="form-control"
-        placeholder="Search products..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
+      <input className="form-control" placeholder="Search products..." value={text} onChange={(e) => setText(e.target.value)} />
     </div>
   );
 }

@@ -39,29 +39,18 @@ function Header() {
           🔹 TOP INFO BAR
       ====================================================== */}
       <div className="bg-light border-bottom small py-1 px-3 d-flex justify-content-between">
-        <span>
-          📧 jotishk649@gmail.com | 📞 +91 7827710029
-        </span>
-        <Link to="/help" className="text-muted text-decoration-none">
-          Help
-        </Link>
+        <span>📧 jotishk649@gmail.com | 📞 +91 7827710029</span>
+        <Link to="/help" className="text-muted text-decoration-none"> Help</Link>
       </div>
 
       {/* =====================================================
           🔹 MAIN NAVBAR
       ====================================================== */}
-      <nav
-        className={`navbar navbar-expand-lg shadow-sm py-3 ${theme === "dark"
-          ? "navbar-dark bg-dark"
-          : "navbar-light bg-white"
-          }`}
-      >
+      <nav className={`navbar navbar-expand-lg shadow-sm py-3 ${theme === "dark" ? "navbar-dark bg-dark" : "navbar-light bg-white"}`}>
         <div className="container-fluid">
 
           {/* ================= BRAND ================= */}
-          <Link className="navbar-brand fw-bold text-primary fs-4" to="/">
-            ShopEase
-          </Link>
+          <Link className="navbar-brand fw-bold text-primary fs-4" to="/"> ShopEase</Link>
 
           {/* ================= DESKTOP MEGA MENU ================= */}
           {/* Only visible on large screens */}
@@ -70,12 +59,7 @@ function Header() {
           </div>
 
           {/* ================= MOBILE TOGGLER ================= */}
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-          >
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span className="navbar-toggler-icon"></span>
           </button>
 
@@ -92,39 +76,18 @@ function Header() {
             <div className="ms-lg-auto d-flex align-items-center flex-wrap gap-3">
 
               {/* 🔍 SEARCH */}
-              <form
-                className="d-flex"
-                style={{ maxWidth: 280 }}
-                onSubmit={handleSearch}
-              >
-                <input
-                  className="form-control rounded-start-pill"
-                  placeholder="Search products..."
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
-                <button className="btn btn-primary rounded-end-pill">
-                  🔍
-                </button>
+              <form className="d-flex" style={{ maxWidth: 280 }} onSubmit={handleSearch}>
+                <input className="form-control rounded-start-pill" placeholder="Search products..." value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+                <button className="btn btn-primary rounded-end-pill"> 🔍</button>
               </form>
 
               {/* 🛒 CART */}
-              <Link
-                className="nav-link position-relative"
-                to="/cart"
-              >
-                🛒
-                <span className="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill">
-                  {cartCount()}
-                </span>
+              <Link className="nav-link position-relative" to="/cart">🛒
+                <span className="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill">{cartCount()}</span>
               </Link>
 
               {/* 🌗 THEME TOGGLE */}
-              <button
-                className="btn btn-outline-secondary btn-sm"
-                onClick={toggleTheme}
-                title="Toggle Theme"
-              >
+              <button className="btn btn-outline-secondary btn-sm" onClick={toggleTheme} title="Toggle Theme">
                 {theme === "dark" ? (
                   <CiDark size={24} />
                 ) : (
@@ -135,55 +98,21 @@ function Header() {
               {/* ================= AUTH ================= */}
               {!user ? (
                 <>
-                  <Link
-                    className="btn btn-outline-primary"
-                    to="/login"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    className="btn btn-primary"
-                    to="/register"
-                  >
-                    Register
-                  </Link>
+                  <Link className="btn btn-outline-primary" to="/login" > Login</Link>
+                  <Link className="btn btn-primary" to="/register">Register</Link>
                 </>
               ) : (
                 <div className="dropdown">
-                  <button
-                    className="btn dropdown-toggle p-0 border-0 bg-transparent"
-                    data-bs-toggle="dropdown"
-                  >
-                    <img
-                      src={
-                        user.profilePic ||
-                        "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                      }
-                      width="34"
-                      height="34"
-                      className="rounded-circle"
-                      alt="User"
-                    />
+                  <button className="btn dropdown-toggle p-0 border-0 bg-transparent" data-bs-toggle="dropdown" >
+                    <img src={user.profilePic || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} width="34" height="34" className="rounded-circle" alt="User" />
                   </button>
 
                   <ul className="dropdown-menu dropdown-menu-end">
                     {user.role === "admin" && (
-                      <li>
-                        <Link
-                          className="dropdown-item"
-                          to="/admin/dashboard"
-                        >
-                          Admin Panel
-                        </Link>
-                      </li>
+                      <li> <Link className="dropdown-item" to="/admin/dashboard">Admin Panel</Link></li>
                     )}
                     <li>
-                      <button
-                        className="dropdown-item text-danger"
-                        onClick={logout}
-                      >
-                        Logout
-                      </button>
+                      <button className="dropdown-item text-danger" onClick={logout} > Logout </button>
                     </li>
                   </ul>
                 </div>

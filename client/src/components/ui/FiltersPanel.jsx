@@ -1,11 +1,13 @@
 // src/components/FiltersPanel.jsx
 import React, { useState, useEffect } from "react";
+import { useThemeStore } from '../../stores/themeStore';
 
 export default function FiltersPanel({ query = {}, onChangeParam }) {
   const [min, setMin] = useState(query.minPrice || "");
   const [max, setMax] = useState(query.maxPrice || "");
   const [minRating, setMinRating] = useState(query.minRating || "");
   const [sort, setSort] = useState(query.sort || "");
+  const theme = useThemeStore((state) => state.theme);
 
   useEffect(() => {
     setMin(query.minPrice || "");
@@ -30,11 +32,11 @@ export default function FiltersPanel({ query = {}, onChangeParam }) {
   };
 
   return (
-    <div className="mb-4 p-3 rounded fp-card">
+    <div className={`mb-4 p-3 rounded fp-card ${theme === "dark" ? 'bg-dark text-light' : 'bg-light'}`} style={{ background: theme === 'dark' ? '#121212' : '#f6f6f6' }}>
       <h5 className="mb-3 fw-bold fp-title">Filters</h5>
 
       <div className="mb-3">
-        <label className="fp-label">Price</label>
+        <label className={`fp-label ${theme === 'dark' ? 'text-light' : ''} `} >Price</label>
         <div className="d-flex gap-2">
           <input type="number" className="form-control fp-input" placeholder="Min" value={min} onChange={e => setMin(e.target.value)} />
           <input type="number" className="form-control fp-input" placeholder="Max" value={max} onChange={e => setMax(e.target.value)} />
@@ -63,7 +65,7 @@ export default function FiltersPanel({ query = {}, onChangeParam }) {
         <button className="btn fp-btn-primary" onClick={apply}>Apply</button>
         <button className="btn fp-btn-secondary" onClick={clearAll}>Clear</button>
       </div>
-      
+
       {/* Scoped UI Styles */}
       <style jsx>{`
         .fp-card {
