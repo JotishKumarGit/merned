@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}/api`,
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
   withCredentials: true,
 });
+console.log(import.meta.env.VITE_API_URL);
 
 // attach token if exists
 api.interceptors.request.use((config) => {
