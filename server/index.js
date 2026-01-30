@@ -13,7 +13,7 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
-import paymentRoutes  from './routes/paymentRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import subCategoryRoutes from './routes/subCategoryRoutes.js';
 
 dotenv.config();
@@ -27,6 +27,7 @@ const PORT = process.env.PORT || 8080;
 // Middleware
 app.use(cors({
   origin: 'http://localhost:5173',
+  "https://merned-gz5g.vercel.app"
   credentials: true
 }));
 app.use(express.json());
