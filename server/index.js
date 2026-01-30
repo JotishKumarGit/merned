@@ -27,7 +27,6 @@ const PORT = process.env.PORT || 8080;
 // Middleware
 app.use(cors({
   origin: [
-    "http://localhost:5173",
     "https://merned-gz5g.vercel.app"
   ],
   credentials: true
